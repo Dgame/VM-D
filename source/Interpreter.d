@@ -9,7 +9,7 @@ import VM.OpCode;
 struct Interpreter
 {
 private:
-    ubyte[][] opcodes;
+    ubyte[OpCode.size][] opcodes;
     uint pc;
     bool running = true;
     int[Register.max] register;
@@ -18,7 +18,7 @@ private:
 public:
     void append(in OpCode opcode)
     {
-        this.opcodes ~= opcode.bits.dup;
+        this.opcodes ~= opcode.bits;
     }
 
     void append(in Instruction instr, void function(ref const OpCode, ref Interpreter) callback)
