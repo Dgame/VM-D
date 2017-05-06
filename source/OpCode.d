@@ -7,7 +7,7 @@ import VM.Mode;
 
 struct OpCode
 {
-    enum size = 56;
+    enum size = 54;
 
     ubyte[size] bits;
     ubyte offset = 0;
@@ -34,12 +34,12 @@ struct OpCode
 
     auto mode() const
     {
-        return cast(Mode) decode(this.bits[8 .. 12]);
+        return cast(Mode) decode(this.bits[8 .. 10]);
     }
 
     auto value() const
     {
-        return Binary!int(this.bits[12 .. 44]).value;
+        return Binary!int(this.bits[10 .. 42]).value;
     }
 
     auto register() const
@@ -47,9 +47,9 @@ struct OpCode
         import VM.util: s;
         
         return [
-            cast(Register) decode(this.bits[44 .. 48]),
-            cast(Register) decode(this.bits[48 .. 52]),
-            cast(Register) decode(this.bits[52 .. 56])
+            cast(Register) decode(this.bits[42 .. 46]),
+            cast(Register) decode(this.bits[46 .. 50]),
+            cast(Register) decode(this.bits[50 .. 54])
         ].s;
     }
 
@@ -86,6 +86,6 @@ struct OpCode
 
     ref OpCode put(in Mode mode)
     {
-        return this.emplace(mode, 4);
+        return this.emplace(mode, 2);
     }
 }
