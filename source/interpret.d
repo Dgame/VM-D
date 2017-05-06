@@ -38,7 +38,7 @@ void not(ref const OpCode opcode, ref Interpreter vm)
 {
     immutable r1 = opcode.register[0];
 
-    vm.setRegister(Register.ZX, !vm.getRegister(r1));
+    vm.setRegister(r1, !vm.getRegister(r1));
 }
 
 void print(ref const OpCode opcode, ref Interpreter vm)
