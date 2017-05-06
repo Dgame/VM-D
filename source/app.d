@@ -1,7 +1,10 @@
 import std.stdio: writeln;
-import VM.OpCode;
+import VM.build;
 import VM.Interpreter;
+import VM.Binary;
+import VM.Instruction;
 import VM.Register;
+import VM.interpret;
 
 void main()
 {
@@ -29,6 +32,13 @@ void main()
     // writeln(opc.register);
 
     Interpreter vm;
+    vm.append(Instruction.Halt, &halt);
+    vm.append(Instruction.Loadi, &loadi);
+    vm.append(Instruction.Print, &print);
+    vm.append(Instruction.Add, &add);
+    vm.append(Instruction.Equal, &equal);
+    vm.append(Instruction.Not, &not);
+
     vm.append(loadi(42, Register.AX));
     vm.append(loadi(23, Register.BX));
     vm.append(add(Register.AX, Register.BX));

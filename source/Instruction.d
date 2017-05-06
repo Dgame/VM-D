@@ -10,8 +10,8 @@ enum Instruction : ubyte
     Sub,
     Mul,
     Div,
-    IsEqual,
-    IsNot,
+    Equal,
+    Not,
     Jmp,
     JmpIf,
 }
