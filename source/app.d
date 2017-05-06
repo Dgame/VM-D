@@ -50,8 +50,9 @@ void main()
 
     vm.append(move(42, Register.AX));
     vm.append(move(23, Register.BX));
-    vm.append(add(Register.AX, Register.BX));
     vm.append(print(Register.AX));
+    vm.append(print(Register.BX));
+    vm.append(add(Register.AX, Register.BX));
     vm.append(print(Register.AX));
     vm.append(equal(Register.AX, Register.BX));
     vm.append(print(Register.ZX));
