@@ -1,10 +1,13 @@
 module VM.Instruction;
 
-enum Instruction : ubyte
+enum Instruction: ubyte
 {
     Halt = 0,
-    Loadi,
-    Loadv,
+    Move,
+    Assign,
+    Index,
+    Push,
+    Pop,
     Print,
     Add,
     Sub,
@@ -12,6 +15,8 @@ enum Instruction : ubyte
     Div,
     Equal,
     Not,
+    Smaller,
+    SmallerEqual,
     Jmp,
     JmpIf,
 }

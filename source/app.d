@@ -33,14 +33,23 @@ void main()
 
     Interpreter vm;
     vm.append(Instruction.Halt, &halt);
-    vm.append(Instruction.Loadi, &loadi);
+    vm.append(Instruction.Move, &move);
+    vm.append(Instruction.Assign, &assign);
+    vm.append(Instruction.Index, &index);
+    vm.append(Instruction.Push, &push);
+    vm.append(Instruction.Pop, &pop);
     vm.append(Instruction.Print, &print);
     vm.append(Instruction.Add, &add);
+    vm.append(Instruction.Sub, &sub);
+    vm.append(Instruction.Mul, &mul);
+    vm.append(Instruction.Div, &div);
     vm.append(Instruction.Equal, &equal);
+    vm.append(Instruction.Smaller, &smaller);
+    vm.append(Instruction.SmallerEqual, &smallerEqual);
     vm.append(Instruction.Not, &not);
 
-    vm.append(loadi(42, Register.AX));
-    vm.append(loadi(23, Register.BX));
+    vm.append(move(42, Register.AX));
+    vm.append(move(23, Register.BX));
     vm.append(add(Register.AX, Register.BX));
     vm.append(print(Register.AX));
     vm.append(print(Register.AX));

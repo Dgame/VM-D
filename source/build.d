@@ -26,14 +26,49 @@ auto halt()
     return opcode(Instruction.Halt);
 }
 
-auto loadv(int value, in Register reg)
+auto move(int value, in Register reg)
 {
-    return opcode(Instruction.Loadv, Mode.Variable, value).put(reg);
+    return opcode(Instruction.Move, Mode.Immediate, value).put(reg);
 }
 
-auto loadi(int value, in Register reg)
+auto move(in Register r1, in Register r2)
 {
-    return opcode(Instruction.Loadi, Mode.Immediate, value).put(reg);
+    return opcode(Instruction.Move, Mode.Register).put(r1, r2);
+}
+
+auto assign(int value)
+{
+    return opcode(Instruction.Assign, Mode.Immediate, value);
+}
+
+auto assign(in Register reg)
+{
+    return opcode(Instruction.Assign, Mode.Register).put(reg);
+}
+
+auto index(int value)
+{
+    return opcode(Instruction.Index, Mode.Immediate, value);
+}
+
+auto index(in Register reg)
+{
+    return opcode(Instruction.Index, Mode.Register).put(reg);
+}
+
+auto push(int value)
+{
+    return opcode(Instruction.Push, Mode.Immediate, value);
+}
+
+auto push(in Register reg)
+{
+    return opcode(Instruction.Push, Mode.Register).put(reg);
+}
+
+auto pop(in Register reg)
+{
+    return opcode(Instruction.Pop).put(reg);
 }
 
 auto add(in Register r1, in Register r2)

@@ -4,6 +4,5 @@ enum Mode: ubyte
 {
     None = 0,
     Immediate,
-    Register,
-    Variable
+    Register
 }

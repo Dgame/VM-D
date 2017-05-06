@@ -8,6 +8,22 @@ import VM.OpCode;
 
 alias Callable = void function(ref const OpCode, ref Interpreter);
 
+struct Stack
+{
+    private int[16] stack;
+    private ubyte offset = 0;
+
+    void push(int value)
+    {
+        this.stack[this.offset++] = value;
+    }
+
+    auto pop()
+    {
+        return this.stack[this.offset--];
+    }
+}
+
 struct Interpreter
 {
 private:
@@ -15,6 +31,9 @@ private:
     uint pc;
     bool running = true;
     int[Register.max] register;
+    int[uint] variables;
+    uint vindex;
+    Stack stack;
     Callable[Instruction] callbacks;
 
 public:
@@ -59,10 +78,67 @@ public:
         this.register[reg - 1] = value;
     }
 
+    void setRegister(in Register r1, in Register r2)
+    {
+        this.setRegister(r1, this.getRegister(r2));
+    }
+
     auto getRegister(in Register reg)
     {
         writeln("Read from Register: ", reg);
         return this.register[reg - 1];
+    }
+
+    void setIndex(uint index)
+    {
+        this.vindex = index;
+    }
+
+    void setIndex(in Register reg)
+    {
+        this.setIndex(this.getRegister(reg));
+    }
+
+    auto index() const
+    {
+        return this.vindex;
+    }
+
+    void push(int value)
+    {
+        this.stack.push(value);
+    }
+
+    void push(in Register reg)
+    {
+        this.push(this.getRegister(reg));
+    }
+
+    void pop(in Register reg)
+    {
+        this.setRegister(reg, this.pop);
+    }
+
+    auto pop()
+    {
+        return this.stack.pop;
+    }
+
+    void setVariable(uint index, int value)
+    {
+        writeln("Write into Variable: ", index, " = ", value);
+        this.variables[index] = value;
+    }
+
+    void setVariable(uint index, in Register reg)
+    {
+        this.setVariable(index, this.getRegister(reg));
+    }
+
+    auto getVariable(uint index)
+    {
+        writeln("Read from Variable: ", index);
+        return this.variables[index];
     }
     
     void eval(in ubyte[] bytes)
