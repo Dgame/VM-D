@@ -6,6 +6,8 @@ import VM.Mode;
 import VM.Register;
 import VM.OpCode;
 
+alias Callable = void function(ref const OpCode, ref Interpreter);
+
 struct Interpreter
 {
 private:
@@ -13,7 +15,7 @@ private:
     uint pc;
     bool running = true;
     int[Register.max] register;
-    void function(ref const OpCode, ref Interpreter)[Instruction] callbacks;
+    Callable[Instruction] callbacks;
 
 public:
     void append(in OpCode opcode)
@@ -21,7 +23,7 @@ public:
         this.opcodes ~= opcode.bits;
     }
 
-    void append(in Instruction instr, void function(ref const OpCode, ref Interpreter) callback)
+    void append(in Instruction instr, Callable callback)
     {
         this.callbacks[instr] = callback;
     }
