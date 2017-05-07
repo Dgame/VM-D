@@ -22,10 +22,10 @@ struct Binary(T)
 
     auto value() const
     {
-        return decode(this.bits);
+        return .decode(this.bits);
     }
     
-    static auto encode(T)(T value)
+    static auto encode(T value)
     {
         ubyte[size] bits;
         size_t len = size;
@@ -36,11 +36,6 @@ struct Binary(T)
         }
 
         return bits;
-    }
-
-    static auto decode(ubyte[size] bits)
-    {
-        return .decode(bits[]);
     }
 }
 
