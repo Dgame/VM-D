@@ -1,20 +1,22 @@
 module VM.OpCode;
 
+import std.stdio: writeln;
 import VM.Binary;
 import VM.Instruction;
 import VM.Register;
 import VM.Mode;
+import VM.Type;
 
 struct OpCode
 {
-    enum size = 54;
+    enum size = 58;
 
     ubyte[size] bits;
     ubyte offset = 0;
 
     this(in Instruction instr)
     {
-        this.put(Binary!ubyte(instr));
+        this.put(instr);
     }
 
     this(ubyte[size] bits)
@@ -37,9 +39,14 @@ struct OpCode
         return cast(Mode) decode(this.bits[8 .. 10]);
     }
 
+    auto type() const
+    {
+        return cast(Type) decode(this.bits[10 .. 14]);
+    }
+
     auto value() const
     {
-        return Binary!int(this.bits[10 .. 42]).value;
+        return Binary!int(this.bits[14 .. 46]).value;
     }
 
     auto register() const
@@ -47,24 +54,36 @@ struct OpCode
         import VM.util: s;
         
         return [
-            cast(Register) decode(this.bits[42 .. 46]),
             cast(Register) decode(this.bits[46 .. 50]),
-            cast(Register) decode(this.bits[50 .. 54])
+            cast(Register) decode(this.bits[50 .. 54]),
+            cast(Register) decode(this.bits[54 .. 58])
         ].s;
     }
 
-    ref OpCode emplace(int value, ubyte size)
+    ref OpCode put(in Instruction instr)
     {
-        this.bits[this.offset .. this.offset + size] = Binary!int(value).bits[$ - size .. $];
-        this.offset += size;
+        this.bits[0 .. 8] = Binary!ubyte(instr).bits;
 
         return this;
     }
 
-    ref OpCode put(T)(in Binary!T bin)
+    ref OpCode put(in Mode mode)
     {
-        bits[this.offset .. this.offset + bin.size] = bin.bits;
-        this.offset += bin.size;
+        this.bits[8 .. 10] = Binary!ubyte(mode).bits[6 .. 8];
+
+        return this;
+    }
+
+    ref OpCode put(in Type type)
+    {
+        this.bits[10 .. 14] = Binary!ubyte(type).bits[4 .. 8];
+
+        return this;
+    }
+
+    ref OpCode put(int value)
+    {
+        this.bits[14 .. 46] = Binary!int(value).bits;
 
         return this;
     }
@@ -81,11 +100,10 @@ struct OpCode
 
     ref OpCode put(in Register r1, in Register r2, in Register r3)
     {
-        return this.emplace(r1, 4).emplace(r2, 4).emplace(r3, 4);
-    }
+        this.bits[46 .. 50] = Binary!ubyte(r1).bits[4 .. 8];
+        this.bits[50 .. 54] = Binary!ubyte(r2).bits[4 .. 8];
+        this.bits[54 .. 58] = Binary!ubyte(r3).bits[4 .. 8];
 
-    ref OpCode put(in Mode mode)
-    {
-        return this.emplace(mode, 2);
+        return this;
     }
 }

@@ -5,20 +5,26 @@ import VM.Binary;
 import VM.Instruction;
 import VM.Register;
 import VM.Mode;
+import VM.Type;
 
 auto opcode(in Instruction instr)
 {
-    return opcode(instr, Mode.None);
+    return OpCode(instr);
 }
 
 auto opcode(in Instruction instr, in Mode mode)
 {
-    return opcode(instr, mode, 0);
+    return OpCode(instr).put(mode);
+}
+
+auto opcode(in Instruction instr, in Type type)
+{
+    return OpCode(instr).put(type);
 }
 
 auto opcode(in Instruction instr, in Mode mode, int value)
 {
-    return OpCode(instr).put(mode).put(Binary!int(value));
+    return OpCode(instr).put(mode).put(Type.Integer).put(value);
 }
 
 auto halt()
